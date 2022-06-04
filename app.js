@@ -1,6 +1,9 @@
+require('dotenv').config();
+// console.log(process.env);
 const express = require('express');
 const app = express();
 const tasksRouter = require('./routes/tasks');
+const { connectToDB } = require('./db/connect');
 
 // Routes
 // app.get('/hello', (req, res) => {
@@ -21,6 +24,18 @@ app.use('/api/v1/tasks', tasksRouter);
 
 const port = 3000;
 
-app.listen(port, () => {
-  console.log(`server is listening on port ${port}...`);
-});
+const startApp = () => {
+  connectToDB(process.env.MONGO_URI)
+    .then(() => {
+      console.log('Connected to DB');
+
+      app.listen(port, () => {
+        console.log(`server is listening on port ${port}...`);
+      });
+    })
+    .catch((err) => {
+      console.log(`Ups, wast able to connect to DB: ${err}`);
+    });
+};
+
+startApp();

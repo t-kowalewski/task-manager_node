@@ -9,8 +9,12 @@ const getTask = (req, res) => {
 };
 
 const addTask = async (req, res) => {
-  const task = await Task.create(req.body);
-  res.status(201).json({ task });
+  try {
+    const task = await Task.create(req.body);
+    res.status(201).json({ task });
+  } catch (err) {
+    res.status(400).json({ compleated: false, msg: err.message });
+  }
 };
 
 const editTask = (req, res) => {

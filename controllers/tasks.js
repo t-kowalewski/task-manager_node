@@ -11,8 +11,15 @@ const getTasks = async (req, res) => {
 
 const getTask = async (req, res) => {
   try {
-    const task = await Task.findOne({ _id: req.params.id });
-    // const task = await Task.findById(req.params.id);
+    // const task = await Task.findOne({ _id: req.params.id });
+    const task = await Task.findById(req.params.id);
+    // find..() returns null if search query has same length as correct id but can't be found - we handle it
+    if (!task) {
+      return res
+        .status(404)
+        .json({ msg: `Task with id ${req.params.id} not found` });
+    }
+
     res.status(200).json({ task });
   } catch (err) {
     res.status(404).json({ msg: `Task with id ${req.params.id} not found` });

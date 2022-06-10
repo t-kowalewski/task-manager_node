@@ -5,15 +5,14 @@ const app = express();
 const tasksRouter = require('./routes/tasks');
 const { connectToDB } = require('./db/connect');
 
-// Routes
-// app.get('/hello', (req, res) => {
-//   res.send('Hello there');
-// });
+// Routes & Middleware
+// middleware to serve static files
+app.use(express.static('./public'));
 
 // middleware to parse json data
 app.use(express.json());
 
-// Use router middleware
+// use router middleware
 app.use('/api/v1/tasks', tasksRouter);
 
 // app.get('/api/v1/tasks') - get all tasks

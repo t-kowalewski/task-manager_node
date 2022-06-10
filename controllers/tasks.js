@@ -31,12 +31,31 @@ const addTask = async (req, res) => {
     const task = await Task.create(req.body);
     res.status(201).json({ task });
   } catch (err) {
-    res.status(400).json({ compleated: false, msg: err.message });
+    res.status(400).json({ completed: false, msg: err.message });
   }
 };
 
-const editTask = (req, res) => {
-  res.send('Edit task');
+const editTask = async (req, res) => {
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!task) {
+      return res.status(404).json({
+        completed: false,
+        msg: `task with id ${req.params.id} not found`,
+      });
+    }
+
+    res.status(201).json({ completed: true, task });
+  } catch (err) {
+    res.status(500).json({
+      completed: false,
+      msg: err,
+    });
+  }
 };
 
 const deleteTask = async (req, res) => {
@@ -48,7 +67,7 @@ const deleteTask = async (req, res) => {
         .json({ msg: `task with id ${req.params.id} not found` });
     }
 
-    res.status(200).json({ compleated: true, deletedObj });
+    res.status(200).json({ completed: true, deletedObj });
   } catch (err) {
     res.status(404).json({ msg: `task with id ${req.params.id} not found` });
   }

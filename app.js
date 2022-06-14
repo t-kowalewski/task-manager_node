@@ -3,6 +3,7 @@ const express = require('express');
 const tasksRouter = require('./routes/tasks');
 const { connectToDB } = require('./db/connect');
 const { notFound } = require('./middleware/not-found');
+const { errorHandler } = require('./middleware/error-handler');
 const app = express();
 
 // Routes & Middleware
@@ -17,6 +18,9 @@ app.use('/api/v1/tasks', tasksRouter);
 
 // handle 404
 app.use(notFound);
+
+// custom error-handling middleware
+app.use(errorHandler);
 
 const port = 3000;
 

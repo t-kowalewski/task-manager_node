@@ -22,7 +22,7 @@ app.use(notFound);
 // custom error-handling middleware
 app.use(errorHandler);
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const startApp = () => {
   connectToDB(process.env.MONGO_URI)
